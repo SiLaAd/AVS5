@@ -3,6 +3,7 @@
 include './classes/userClass.php';
 include './classes/messageClass.php';
 include './helperFunctions.php';
+require_once 'HTTP/Request2.php';
 
 if (isset($_POST['username'])) {
     $username = $_POST['username'];
@@ -112,18 +113,15 @@ function writeChatServerData($username, $nachricht, $chatRaum) {
     $ipServerArray = unserialize(urldecode($contentServer[0]));
     //GetChatData
     $content = file($filepath . "$chatRaum.txt");
-    $message = new messageClass($nachricht, $username);
     $messageArray= unserialize(urldecode($content[0]));
-    $messageArray[] = $message;
-    $sendObject = serialize($messageArray);
     //Senden
     foreach ($ipServerArray as $ipsA) {
         if ($ipsA != $_SERVER['SERVER_ADDR']) {
-            $server_url = 'http://' . $ipsA . '/AVS3/setServerChatList.php';
+            $server_url = 'http://'.$ipsA.'/AVS3/setServerChatList.php';
             $send = new HTTP_Request2($server_url, HTTP_Request2::METHOD_GET, array('use_brackets' => true));
             $url = $send->getUrl();
             $url->setQueryVariables(array(
-                'message' => json_encode($sendObject),
+                'message' => json_encode($messageArray),
                 'chatraum' => $chatRaum
             ));
             $send->send();
