@@ -1,5 +1,5 @@
 <?php
-
+include './helperFunctions.php';
 include './classes/userClass.php';
 require_once 'HTTP/Request2.php';
 /*
@@ -10,6 +10,11 @@ require_once 'HTTP/Request2.php';
 registerServer();
 
 function registerServer() {
+    $semaphore = initSema();
+    while (!$semaphore) {
+        echo "Failed on sem_get().\n";
+    }
+    sem_acquire($semaphore);
     $ip = $_SERVER['REMOTE_ADDR'];
     if (isset($_GET['name'])) {
         $server_name = $_GET['name'];
@@ -36,6 +41,7 @@ function registerServer() {
         fclose($datei);
         sendeServer();
     }
+    sem_release($semaphore);
 }
 
 function sendeServer() {
