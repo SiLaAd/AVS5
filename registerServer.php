@@ -50,13 +50,14 @@ function sendeServer() {
     }
 
     foreach ($fileWoEx as $ip) {
-
-        $send = new HTTP_Request2('http://.$ip./AVS3/setServerList.php', HTTP_Request2::METHOD_GET, array('use_brackets' => true));
-
+        $server_url = 'http://'.$ip.'/AVS3/setServerList.php';
+        $send = new HTTP_Request2($server_url, HTTP_Request2::METHOD_GET, array('use_brackets' => true));
         $url = $send->getUrl();
         $url->setQueryVariables(array(
-            'ipList' => $fileWoEx,
+            'ipList' => json_encode($fileWoEx),
+            'ip' => $ip
         ));
+        $send->send();
     }
 
     //Rückgabe des Dateinamen und des Inhalts

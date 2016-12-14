@@ -1,7 +1,7 @@
 <?php
 
 require_once 'HTTP/Request2.php';
-$request = new HTTP_Request2('http://172.22.0.12/AVS3/registerServer.php', HTTP_Request2::METHOD_GET, array('use_brackets' => true));
+$request = new HTTP_Request2('http://172.22.0.8/AVS3/registerServer.php', HTTP_Request2::METHOD_GET, array('use_brackets' => true));
 
 $url = $request->getUrl();
 $url->setQueryVariables(array(
