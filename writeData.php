@@ -97,10 +97,10 @@ function writeChatData($username, $nachricht, $chatRaum) {
     file_put_contents($filepath . "$chatRaum.txt", "");
     fwrite($datei, urlencode(serialize($messageArray)));   // Daten schreiben, Zeilenumbruch
     sem_release($semaphore);
-    writeChatServerData($username, $nachricht, $chatRaum);
+    writeChatServerData($message, $chatRaum);
 }
 
-function writeChatServerData($username, $nachricht, $chatRaum) {
+function writeChatServerData($message, $chatRaum) {
     $semaphore = initSema();
     while (!$semaphore) {
         echo "Failed on sem_get().\n";
@@ -112,8 +112,7 @@ function writeChatServerData($username, $nachricht, $chatRaum) {
     $contentServer = file($filepathServer . "serverliste.txt");
     $ipServerArray = unserialize(urldecode($contentServer[0]));
     //GetChatData
-    $content = file($filepath . "$chatRaum.txt");
-    $messageArray= unserialize(urldecode($content[0]));
+    
     //Senden
     foreach ($ipServerArray as $ipsA) {
         if ($ipsA != $_SERVER['SERVER_ADDR']) {
@@ -121,7 +120,7 @@ function writeChatServerData($username, $nachricht, $chatRaum) {
             $send = new HTTP_Request2($server_url, HTTP_Request2::METHOD_GET, array('use_brackets' => true));
             $url = $send->getUrl();
             $url->setQueryVariables(array(
-                'message' => json_encode($messageArray),
+                'message' => json_encode($message),
                 'chatraum' => $chatRaum
             ));
             $send->send();

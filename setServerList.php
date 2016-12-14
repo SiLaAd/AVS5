@@ -1,5 +1,5 @@
 <?php
-
+include './helperFunctions.php';
 if (isset($_GET['ipList'])) {
     $semaphore = initSema();
     while (!$semaphore) {
