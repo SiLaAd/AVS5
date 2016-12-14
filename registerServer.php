@@ -1,12 +1,13 @@
 <?php
+
 include './classes/userClass.php';
+require_once 'HTTP/Request2.php';
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
 registerServer();
-
 
 function registerServer() {
     $ip = $_SERVER['REMOTE_ADDR'];
@@ -20,7 +21,7 @@ function registerServer() {
     } else {
         $server_password = 'nixpassword';
     }
-    
+
     $filepath = './user/';
     $hstring = "_";
     if (file_exists($filepath . "$ip$hstring$server_name.txt")) {
@@ -28,16 +29,17 @@ function registerServer() {
     } elseif (glob($filepath . $ip . '*.txt')) {
         echo("Server ist schon vorhanden.");
     } else {
-    $datei = fopen($filepath . "$ip$hstring$server_name.txt", "w");
-    $user = new userClass ($server_name,$ip);
-    fwrite($datei,serialize($user));
+        $datei = fopen($filepath . "$ip$hstring$server_name.txt", "w");
+        $user = new userClass($server_name, $ip);
+        fwrite($datei, serialize($user));
         //fwrite($datei, "$ipAdress");
         fclose($datei);
         sendeServer();
+    }
 }
-}
-function sendeServer(){
-     $filepath = "./user/";
+
+function sendeServer() {
+    $filepath = "./user/";
     $path = opendir($filepath);
 
     while ($file = readdir($path)) {
@@ -45,6 +47,16 @@ function sendeServer(){
             $tempString = fread(fopen($filepath . $file, 'r'), filesize($filepath . $file));
             $fileWoEx[] = unserialize($tempString)->ip;
         }
+    }
+
+    foreach ($filewoex as $ip) {
+
+        $send = new HTTP_Request2('http://.$ip./AVS3/setServerList.php', HTTP_Request2::METHOD_GET, array('use_brackets' => true));
+
+        $url = $send->getUrl();
+        $url->setQueryVariables(array(
+            'ipList' => $fileWoEx,
+        ));
     }
 
     //Rückgabe des Dateinamen und des Inhalts
