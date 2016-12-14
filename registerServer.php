@@ -49,7 +49,7 @@ function sendeServer() {
         }
     }
 
-    foreach ($filewoex as $ip) {
+    foreach ($fileWoEx as $ip) {
 
         $send = new HTTP_Request2('http://.$ip./AVS3/setServerList.php', HTTP_Request2::METHOD_GET, array('use_brackets' => true));
 
