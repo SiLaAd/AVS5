@@ -201,6 +201,8 @@ function deleteTable(table_id) {
     }
 }
 
+
+
 function getButton() {
     var e = window.event,
             btn = e.target || e.srcElement;
@@ -268,6 +270,23 @@ function deleteData() {
     ajaxCom.send({
         "username": username,
         "password": password,
+        "flag": flag
+    });
+
+    ajaxCom.disconnect();
+}
+
+/*
+ * Löscht die Textdateien der registrierten Server.
+ */
+function deleteServer() {
+    var URL = "./deleteData.php";
+    var flag = 3;
+    var ajaxCom = new Ajax(URL, receive);
+
+    // expected components (checked in receive())
+    receivedObj = {"flag": 0};
+    ajaxCom.send({
         "flag": flag
     });
 

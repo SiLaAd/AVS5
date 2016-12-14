@@ -24,7 +24,7 @@ function registerServer() {
     $filepath = './user/';
     $hstring = "_";
     if (file_exists($filepath . "$ip$hstring$server_name.txt")) {
-        echo("Server schon vorhanden.");
+        echo("Server ist schon vorhanden.");
     } elseif (glob($filepath . $ip . '*.txt')) {
         echo("Server ist schon vorhanden.");
     } else {

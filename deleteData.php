@@ -13,9 +13,12 @@ if (isset($_POST['password'])) {
 }
 if (($_POST['flag'])==1) {
     deleteFile($username,$password);
-} else {
+} else if (($_POST['flag'])==0) {
     deleteAllFiles($username, $password);
+} else if (($_POST['flag'])==3) {
+    deleteAllServer();
 }
+
 
 
 
@@ -70,5 +73,23 @@ function deleteAllFiles($username, $password) {
     } else {
         echo ("Fehler beim Löschen. Sie sind nicht berechtigt.");
     }
+    
+}
+
+/*
+ * Löscht alle Server-Textdateien aus dem User-Verzeichnis
+ * Damit werden alle Server vom Repositoryserver entfernt
+ */
+function deleteAllServer() {
+    $filepath = "./user/";
+    $path = opendir($filepath);
+        while ($file = readdir($path)) {
+        if ($file != "." && $file != "..") {
+            unlink($filepath . $file);
+        }
+    }
+    echo ("Alle Server wurden gelöscht.");
+    closedir($path);
+    
     
 }
