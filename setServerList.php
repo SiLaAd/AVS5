@@ -10,7 +10,6 @@
         fwrite($datei,serialize($ipListe));
         //fwrite($datei, "$ipAdress");
         fclose($datei);
-        fclose($datei2);
         
         
         

@@ -1,4 +1,5 @@
 <?php
+
 include './classes/userClass.php';
 include './classes/messageClass.php';
 include './helperFunctions.php';
@@ -31,8 +32,8 @@ if (isset($_POST['password'])) {
 }
 
 
-if ($_SERVER['REMOTE_ADDR']=='::1') {
-    $ipAdress =  getHostByName(getHostName());
+if ($_SERVER['REMOTE_ADDR'] == '::1') {
+    $ipAdress = getHostByName(getHostName());
 } else {
     $ipAdress = $_SERVER['REMOTE_ADDR'];
 }
@@ -47,12 +48,12 @@ switch ($flag) {
         writeChatData($username, $textMessage, $chatRaum);
         break;
     case 'addUser':
-        createFile($username, $ipAdress, $password,$pcName);
-        break;        
+        createFile($username, $ipAdress, $password, $pcName);
+        break;
     default:
 }
 
-function createFile($username, $ipAdress, $password,$pcName) {
+function createFile($username, $ipAdress, $password, $pcName) {
     $filepath = './user/';
     $hstring = "_";
     if (file_exists($filepath . "$username$hstring$password.txt")) {
@@ -60,42 +61,73 @@ function createFile($username, $ipAdress, $password,$pcName) {
     } elseif (glob($filepath . $username . '*.txt')) {
         echo("Benutzer ist schon vorhanden.");
     } else {
-                
+
         $datei = fopen($filepath . "$username$hstring$password.txt", "w");
-        $user = new userClass ($username,$ipAdress);
-        fwrite($datei,serialize($user));
+        $user = new userClass($username, $ipAdress);
+        fwrite($datei, serialize($user));
         //fwrite($datei, "$ipAdress");
         fclose($datei);
     }
-    
+
     echo json_encode(array(
         'username' => $username,
         'password' => $password,
         'ipAdress' => $ipAdress,
         'pcName' => $pcName,
     ));
-    
-    
 }
 
 function writeChatData($username, $nachricht, $chatRaum) {
     $semaphore = initSema();
     while (!$semaphore) {
-            echo "Failed on sem_get().\n";
-        }
+        echo "Failed on sem_get().\n";
+    }
     sem_acquire($semaphore);
-    $message = new messageClass($nachricht,$username); 
+    $message = new messageClass($nachricht, $username);
     $filepath = "./chatRooms/$chatRaum/";
     $datei = fopen($filepath . "$chatRaum.txt", "a+");   // Datei öffnen
     $content = file($filepath . "$chatRaum.txt");
 
-    $messageArray=unserialize(urldecode($content[0]));
+    $messageArray = unserialize(urldecode($content[0]));
 
-    $messageArray[]=$message;
+    $messageArray[] = $message;
 
-   
-    file_put_contents($filepath . "$chatRaum.txt","");
+
+    file_put_contents($filepath . "$chatRaum.txt", "");
     fwrite($datei, urlencode(serialize($messageArray)));   // Daten schreiben, Zeilenumbruch
-    fclose($datei);   
+    sem_release($semaphore);
+    writeChatServerData($username, $nachricht, $chatRaum);
+}
+
+function writeChatServerData($username, $nachricht, $chatRaum) {
+    $semaphore = initSema();
+    while (!$semaphore) {
+        echo "Failed on sem_get().\n";
+    }
+    sem_acquire($semaphore);
+    //Multicast 
+    $filepath = "./chatRooms/$chatRaum/";
+    $filepathServer = './serverList/';
+    $contentServer = file($filepathServer . "serverliste.txt");
+    $ipServerArray = unserialize(urldecode($contentServer[0]));
+    //GetChatData
+    $content = file($filepath . "$chatRaum.txt");
+    $message = new messageClass($nachricht, $username);
+    $messageArray= unserialize(urldecode($content[0]));
+    $messageArray[] = $message;
+    $sendObject = serialize($messageArray);
+    //Senden
+    foreach ($ipServerArray as $ipsA) {
+        if ($ipsA != $_SERVER['SERVER_ADDR']) {
+            $server_url = 'http://' . $ipsA . '/AVS3/setServerChatList.php';
+            $send = new HTTP_Request2($server_url, HTTP_Request2::METHOD_GET, array('use_brackets' => true));
+            $url = $send->getUrl();
+            $url->setQueryVariables(array(
+                'message' => json_encode($sendObject),
+                'chatraum' => $chatRaum
+            ));
+            $send->send();
+        }
+    }
     sem_release($semaphore);
 }
