@@ -337,4 +337,3 @@ function convertTimestampHMS(timestamp){
     var time = hour + ':' +min+':'+sec;
     return time;   
 }
-
