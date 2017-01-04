@@ -35,7 +35,7 @@ function levenshteins($wordsArray, $word) {
             $shortest = $lev;
         }
     }
-
+    
     echo "Eingegebenes Wort: $input\n";
     if ($shortest == 0) {
         echo "Exakter Treffer gefunden: $closest\n";

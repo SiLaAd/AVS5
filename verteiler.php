@@ -58,4 +58,6 @@ if ($servers == 1) {
     echo json_encode(array(
         'files' => $fileWoEx
     ));
+    $bodyA = $request->send()->getBody();
+    echo($bodyA);
 }
