@@ -96,3 +96,20 @@ function reset() {
     x.reset();
     update();
 }
+
+function wordchecker() {
+    start(); 
+    var URL = "./levi.php";
+    var word = document.getElementById("word").value;    
+    var ajaxCom = new Ajax(URL, receive);
+
+    // expected components (checked in receive())
+    receivedObj = {"word": 0};
+    ajaxCom.send({
+        "word": word
+    });
+
+    ajaxCom.disconnect();
+    update();
+    stop();
+}

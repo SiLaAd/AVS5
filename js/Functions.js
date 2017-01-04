@@ -274,7 +274,7 @@ function deleteData() {
     });
 
     ajaxCom.disconnect();
-}
+}receive
 
 /*
  * Löscht die Textdateien der registrierten Server.
@@ -337,3 +337,4 @@ function convertTimestampHMS(timestamp){
     var time = hour + ':' +min+':'+sec;
     return time;   
 }
+

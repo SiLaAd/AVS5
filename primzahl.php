@@ -15,7 +15,7 @@ function countServer() {
     //Senden
     foreach ($serverArray as $ipsA) {
         if ($ipsA != $_SERVER['SERVER_ADDR']) {
-              $countServer+1;
+              $countServer = $countServer+1;
 //            $server_url = 'http://'.$ipsA.'/AVS3/setServerChatList.php';
 //            $send = new HTTP_Request2($server_url, HTTP_Request2::METHOD_GET, array('use_brackets' => true));
 //            $url = $send->getUrl();
