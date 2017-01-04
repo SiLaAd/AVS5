@@ -52,3 +52,40 @@ function initSema() {
         $autoRelease = 1;
         return $semaphore = sem_get($key, $max, $permissions, $autoRelease);
 }
+
+function countServer() {
+    $filepath = "./serverList/";
+    $path = opendir($filepath);
+    $countServer = 0;
+    $fp = fopen($filepath . "serverliste.txt", 'r');
+    $content = file($filepath . "serverliste.txt");
+    $serverArray = unserialize(urldecode($content[0]));
+    //Senden
+    foreach ($serverArray as $ipsA) {
+        if ($ipsA != $_SERVER['SERVER_ADDR']) {
+            $countServer = $countServer + 1;
+        }
+    }
+    return $countServer;
+}
+
+/**
+ * 
+ * @param Array $list
+ * @param int $p
+ * @return multitype:multitype:
+ * @link http://www.php.net/manual/en/function.array-chunk.php#75022
+ */
+function partition(Array $list, $p) {
+    $listlen = count($list);
+    $partlen = floor($listlen / $p);
+    $partrem = $listlen % $p;
+    $partition = array();
+    $mark = 0;
+    for($px = 0; $px < $p; $px ++) {
+        $incr = ($px < $partrem) ? $partlen + 1 : $partlen;
+        $partition[$px] = array_slice($list, $mark, $incr);
+        $mark += $incr;
+    }
+    return $partition;
+}
