@@ -48,7 +48,6 @@ if ($servers == 0) {
         $send = new HTTP_Request2($server_url, HTTP_Request2::METHOD_GET, array('use_brackets' => true));
         $url = $send ->getUrl();
         $url->setQueryVariables(array(
-            'wordsArray' => json_encode($wordsArray),
             'word' => json_encode($splitArray[$i])
         ));
         //$send ->send();

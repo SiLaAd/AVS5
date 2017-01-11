@@ -1,6 +1,24 @@
 <?php
-levenshteins(json_decode($_GET['wordsArray']), json_decode($_GET['word']));
 ini_set('memory_limit', '-1');
+
+$handle = fopen("words.txt", "r");
+$i = 1;
+$ai = 0;
+ini_set('memory_limit', '-1');
+if ($handle) {
+    while (($line = fgets($handle)) !== false) {
+        while ($i < 1000) {
+            $ai *= $i;
+            $i++;
+        }
+        array_push($wordsArray, $line);
+    }
+    fclose($handle);
+} else {
+    // error opening the file.
+}
+
+levenshteins($wordsArray, json_decode($_GET['word']));
 
 function levenshteins($wordsArray, $words) {
 // eingegebenes falsch geschriebenes Wort
