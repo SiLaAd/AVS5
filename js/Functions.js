@@ -309,7 +309,7 @@ function getChatText(chatRaum) {
     });
     
     var response = receivedObj.messages;
-    
+    refreshChatTextInterval 
     $('#chatAreaText').text('');
     for (var i = response.length - 1; i >= 0; i--) {
          var chatText = '<div>' + "" + (response[i].timestamp)+ " " + response[i].username + ' : ' + response[i].message + '</div>';
@@ -337,4 +337,6 @@ function convertTimestampHMS(timestamp){
     var time = hour + ':' +min+':'+sec;
     return time;   
 }
+
+
 

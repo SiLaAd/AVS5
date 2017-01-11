@@ -14,19 +14,23 @@ and open the template in the editor.
         <script src="js/Writer.js"></script>
         <script src="js/Functions.js"></script>
         <script src="js/stopwatch.js"></script>
+        
     </head>
-    <body onload="show();">
-        <div id="loginBereich">
-
-            Zahl:
-            <input type="text" size="200px" name="zahl" id="word" />
-            <br><br>      
+    <body>
+    <script>
+        console.log ('laden');
+        var timer = 10;
+    var refreshChatTextInterval = setInterval(function () {
+    var URL = "./dataChecker.php";
+    var ajaxCom = new Ajax(URL, receive);
+    // expected components (checked in receive())
+    receivedObj = {};
+    ajaxCom.send({
+    });
+        ;
+    }, timer);
+    </script>
         
-	<div>Time: <span id="time"></span></div>
-	<input type="button" value="start" onclick="wordchecker();">
-	<input type="button" value="stop" onclick="stop();">
-	<input type="button" value="reset" onclick="reset()">
-        </div>
-        
+        <div></div>
     </body>
 </html>

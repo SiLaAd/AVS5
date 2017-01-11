@@ -38,14 +38,18 @@ if ($servers == 0) {
             'wordSend' => json_encode($splitArray[$i])
         ));
         //$send ->send();
-        $response = $send->send();
+        $responses[] = $send->send();
+        echo(date('h:m:s'));
         $i++;
         
         }
     }
    
     //GET Antwort
-    echo($response->getBody());
+    foreach ($responses as $response) {
+       echo("Server:". $response->getBody()); 
+    }
+    
 }
 
 
