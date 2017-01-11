@@ -99,7 +99,7 @@ function reset() {
 
 function wordchecker() {
     start(); 
-    var URL = "./levi.php";
+    var URL = "./verteiler.php";
     var word = document.getElementById("word").value;    
     var ajaxCom = new Ajax(URL, receive);
 
