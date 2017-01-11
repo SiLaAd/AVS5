@@ -3,8 +3,10 @@ require_once 'HTTP/Request2.php';
 include './classes/userClass.php';
 include './classes/messageClass.php';
 include './helperFunctions.php';
+//include './levi.php';
 
 $wordsArray = array();
+$words = splitInput($_POST['word']);
 $handle = fopen("words.txt", "r");
 $i = 1;
 $ai = 0;
@@ -24,11 +26,10 @@ if ($handle) {
 $servers = countServer();
 echo("Anzahl Server: " . $servers);
 if ($servers == 0) {
-    levenshteins($wordsArray, $_POST['word']);
+    levenshteins($wordsArray, $words);
 } else {
-    $count = count($wordsArray);
      $splitArray = array();
-     $splitArray = partition($wordsArray, $servers);
+     $splitArray = partition($words, $servers);
      
      
     $filepath = "./user/";
@@ -47,13 +48,23 @@ if ($servers == 0) {
         $send = new HTTP_Request2($server_url, HTTP_Request2::METHOD_GET, array('use_brackets' => true));
         $url = $send ->getUrl();
         $url->setQueryVariables(array(
-            'wordsArray' => json_encode($splitArray[$i]),
-            'word' => $_POST['word']
+            'wordsArray' => json_encode($wordsArray),
+            'word' => json_encode($splitArray[$i])
         ));
-        echo($send ->send()->getBody());
+        //$send ->send();
+        $response = $send->send();
         $i++;
+        
         }
     }
    
     //GET Antwort
+    echo($response->getBody());
+}
+
+
+
+function splitInput($input){
+    $words = explode(",", $input);
+    return $words;
 }

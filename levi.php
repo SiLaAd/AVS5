@@ -1,8 +1,13 @@
 <?php
-levenshteins(json_decode($_GET['wordsArray']), $_GET['word']);
+levenshteins(json_decode($_GET['wordsArray']), json_decode($_GET['word']));
+ini_set('memory_limit', '-1');
 
-function levenshteins($wordsArray, $word) {
+function levenshteins($wordsArray, $words) {
 // eingegebenes falsch geschriebenes Wort
+    foreach ($words as $word){
+        
+    
+    
     $input = $word;
 // Wörterarray als Vergleichsquelle
     $words = $wordsArray;
@@ -41,6 +46,7 @@ function levenshteins($wordsArray, $word) {
         echo "Exakter Treffer gefunden: $closest\n";
     } else {
         echo "Meinten Sie: $closest?\n";
+    }
     }
 }
 
