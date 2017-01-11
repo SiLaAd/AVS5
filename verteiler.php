@@ -3,30 +3,17 @@ require_once 'HTTP/Request2.php';
 include './classes/userClass.php';
 include './classes/messageClass.php';
 include './helperFunctions.php';
-//include './levi.php';
+include './levi.php';
 
 $wordsArray = array();
 $words = splitInput($_POST['word']);
-$handle = fopen("words.txt", "r");
 $i = 1;
 $ai = 0;
 ini_set('memory_limit', '-1');
-if ($handle) {
-    while (($line = fgets($handle)) !== false) {
-        while ($i < 1000) {
-            $ai *= $i;
-            $i++;
-        }
-        array_push($wordsArray, $line);
-    }
-    fclose($handle);
-} else {
-    // error opening the file.
-}
 $servers = countServer();
 echo("Anzahl Server: " . $servers);
 if ($servers == 0) {
-    levenshteins($wordsArray, $words);
+    levenshteins($words);
 } else {
      $splitArray = array();
      $splitArray = partition($words, $servers);
@@ -48,7 +35,7 @@ if ($servers == 0) {
         $send = new HTTP_Request2($server_url, HTTP_Request2::METHOD_GET, array('use_brackets' => true));
         $url = $send ->getUrl();
         $url->setQueryVariables(array(
-            'word' => json_encode($splitArray[$i])
+            'wordSend' => json_encode($splitArray[$i])
         ));
         //$send ->send();
         $response = $send->send();
@@ -64,6 +51,7 @@ if ($servers == 0) {
 
 
 function splitInput($input){
+    echo("test");
     $words = explode(",", $input);
     return $words;
 }
