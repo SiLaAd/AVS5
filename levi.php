@@ -1,11 +1,12 @@
 <?php
 
 ini_set('memory_limit', '-1');
+    if(isset($_POST['wordslist'])){
+    $arrayasd = json_decode($_POST['wordslist']);
+    levenshteins($arrayasd);
+    }
+    
 
-
-if (isset($_GET['wordSend'])) {
-    levenshteins(json_decode($_GET['wordSend']));
-}
 
 function levenshteins($words) {
 
@@ -18,7 +19,6 @@ function levenshteins($words) {
             array_push($wordsArray, $line);
         }
         fclose($handle);
-        echo("test");
     } else {
         // error opening the file.
     }
@@ -26,22 +26,22 @@ function levenshteins($words) {
 
         $input = $word;
 // Wörterarray als Vergleichsquelle
-        $words = $wordsArray;
+        $wordslist = $wordsArray;
 
 // noch keine kürzeste Distanz gefunden
         $shortest = -1;
 
 // durch die Wortliste gehen, um das ähnlichste Wort zu finden
-        foreach ($words as $word) {
+        foreach ($wordslist as $wordlistentry) {
 
             // berechne die Distanz zwischen Inputwort und aktuellem Wort
-            $lev = levenshtein($input, $word);
+            $lev = levenshtein($input, $wordlistentry);
 
             // auf einen exakten Treffer prüfen
             if ($lev == 0) {
 
                 // das nächste Wort ist das Wort selbst (exakter Treffer)
-                $closest = $word;
+                $closest = $wordlistentry;
                 $shortest = 0;
 
                 // Schleife beenden, da wir einen exakten Treffer gefunden haben
@@ -52,17 +52,13 @@ function levenshteins($words) {
             // ODER wenn ein nächstkleineres Wort noch nicht gefunden wurde
             if ($lev <= $shortest || $shortest < 0) {
                 // setze den nächstliegenden Treffer und die kürzestes Distanz
-                $closest = $word;
+                $closest = $wordlistentry;
                 $shortest = $lev;
             }
         }
-
+        echo $_SERVER['SERVER_ADDR'];
         echo "Eingegebenes Wort: $input\n";
-        if ($shortest == 0) {
-            echo "Exakter Treffer gefunden: $closest\n";
-        } else {
-            echo "Meinten Sie: $closest?\n";
-        }
+        echo "Meinten Sie: $closest?\n";
     }
 }
 
