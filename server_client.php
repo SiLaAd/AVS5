@@ -2,7 +2,7 @@
 
 require_once 'HTTP/Request2.php';
 include './helperFunctions.php';
-$request = new HTTP_Request2('http://172.22.0.9/avs4/registerServer.php', HTTP_Request2::METHOD_GET, array('use_brackets' => true));
+$request = new HTTP_Request2('http://172.22.0.5/avs4/registerServer.php', HTTP_Request2::METHOD_GET, array('use_brackets' => true));
 
 $url = $request->getUrl();
 $url->setQueryVariables(array(
