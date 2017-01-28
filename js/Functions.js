@@ -115,12 +115,7 @@ function registerData() {
         "flag" : flag
     }
     );
-    /*
-     write2console(receivedObj.username);
-     write2console(receivedObj.password);
-     write2console(receivedObj.ipAdress);
-     write2console(receivedObj.pcName);
-     */
+    
     ajaxCom.disconnect();
 }
 
@@ -146,9 +141,7 @@ function queryData(table_id) {
     }
     );
 
-    //write2console(receivedObj.files);
-    //write2console(receivedObj.content);
-
+    
 
     var names = receivedObj.files;
 
@@ -340,3 +333,16 @@ function convertTimestampHMS(timestamp){
 
 
 
+function wordSearcher() {
+    var URL = "./indexBegriffe.php";
+    var word = document.getElementById("word").value;    
+    var ajaxCom = new Ajax(URL, receive);
+    
+    // expected components (checked in receive())
+    receivedObj = {"word": 0};
+    ajaxCom.send({
+        "word": word
+    });
+
+    ajaxCom.disconnect();
+}

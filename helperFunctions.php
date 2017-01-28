@@ -89,3 +89,8 @@ function partition(Array $list, $p) {
     }
     return $partition;
 }
+
+function hashMaker($word) {
+    $return = hash('md5',$word);
+    return $return;
+}
