@@ -56,7 +56,7 @@ function sendeServer() {
     }
 
     foreach ($fileWoEx as $ip) {
-        $server_url = 'http://'.$ip.'/avs4/setServerList.php';
+        $server_url = 'http://'.$ip.'/AVS5/setServerList.php';
         $send = new HTTP_Request2($server_url, HTTP_Request2::METHOD_GET, array('use_brackets' => true));
         $url = $send->getUrl();
         $url->setQueryVariables(array(

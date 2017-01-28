@@ -84,7 +84,7 @@ function writeChatData($username, $nachricht, $chatRaum) {
         echo "Failed on sem_get().\n";
     }
     sem_acquire($semaphore);
-    $message = new messageClass($nachricht, $username);
+    $message = new begriffClass($nachricht, $username);
     $filepath = "./chatRooms/$chatRaum/";
     $datei = fopen($filepath . "$chatRaum.txt", "a+");   // Datei öffnen
     $content = file($filepath . "$chatRaum.txt");

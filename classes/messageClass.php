@@ -1,6 +1,6 @@
 <?php
 
-class messageClass {
+class begriffClass {
 
     public $message = "";
     public $username = "";
