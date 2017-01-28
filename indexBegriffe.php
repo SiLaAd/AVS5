@@ -37,7 +37,7 @@ if (isset($_POST['word'])) {
     fwrite($datei, $response->getBody());
     
     
-    echo '<script type="text/javascript" language="Javascript">window.open(./responseData.html);</script>';
+    echo '<a href="http://172.22.0.4/AVS5/responseData.html" target="_blank">Click Me!</a>';
     //GET Antwort
     
         
